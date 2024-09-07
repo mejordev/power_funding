@@ -1,0 +1,30 @@
+services:
+  indexer:
+    build:
+      context: ./indexer
+      dockerfile: rust.dockerfile
+    container_name: indexer
+    depends_on:
+      - db
+    environment:
+      - RPC_URL=http://host.docker.internal:8545
+      - WS_URL=wss://ethereum-holesky-rpc.publicnode.com
+      - CHAIN_ID=10
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
+    volumes:
+      - ./indexer:/usr/src/indexer
+      - ./migrations:/usr/src/indexer/migrations
+  db:
+    container_name: db
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata: {}
