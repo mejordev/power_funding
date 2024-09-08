@@ -1,9 +1,10 @@
 "use client";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Link from "next/link";
-import { Button } from "./ui/button";
-import { AddProjectModal } from "./modals/add-project-modal";
 import { useState } from "react";
+import { GolemLogo } from "./golem-logo";
+import { AddProjectModal } from "./modals/add-project-modal";
+import { Button } from "./ui/button";
 
 interface TopbarProps {}
 
@@ -19,9 +20,12 @@ export const Topbar = (props: TopbarProps) => {
         close={() => setShowCreateProjectModal(false)}
       />
       <div>
-        <Link href="/">
-          <p className="text-xl text-blue-500 font-bold">Power Funding</p>
-        </Link>
+        <div className="flex gap-4 items-center">
+          <GolemLogo />
+          <Link href="/">
+            <p className="text-2xl font-extrabold">Power Funding</p>
+          </Link>
+        </div>
         {/* <p>by </p>
         <Image
           src="https://cdn.prod.website-files.com/62446d07873fde065cbcb8d5/62446d07873fde3688bcb8f6_Golem_Logo_Negative_RGB.svg"
@@ -38,8 +42,8 @@ export const Topbar = (props: TopbarProps) => {
         >
           Add project
         </Button>
-        <Link href="/my-projects">
-          <Button variant="outline">My projects</Button>
+        <Link href="/my-profile">
+          <Button variant="outline">My profile</Button>
         </Link>
         <ConnectButton />
       </div>

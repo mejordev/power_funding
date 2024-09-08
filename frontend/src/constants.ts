@@ -21,3 +21,5 @@ export const LOCK_CONTRACT = {
   address: "0x63704675f72A47a7a183112700Cb48d4B0A94332",
   abi: LOCK_ABI,
 };
+
+export const EXPLORER_BASE_URL = "https://holesky.etherscan.io";

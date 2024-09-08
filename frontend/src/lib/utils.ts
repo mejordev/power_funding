@@ -47,3 +47,7 @@ export const createTypedProjectData = async (projectData: NewProjectData) => {
     console.error("Error signing typed data:", error);
   }
 };
+
+export const shortenAddress = (address: string, chars = 4) => {
+  return `${address.slice(0, chars)}...${address.slice(-chars)}`;
+};

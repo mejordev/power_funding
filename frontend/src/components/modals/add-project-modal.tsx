@@ -1,7 +1,13 @@
+import { PRIMARY_TYPE } from "@/constants";
 import { cn, createTypedProjectData } from "@/lib/utils";
+import { Project, TypedData } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon } from "@radix-ui/react-icons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 import { format } from "date-fns";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useAccount, useSignTypedData } from "wagmi";
 import { z } from "zod";
@@ -25,7 +31,6 @@ import {
 import { Input } from "../ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Textarea } from "../ui/textarea";
-import { PRIMARY_TYPE } from "@/constants";
 
 const formSchema = z.object({
   projectName: z.string(),
@@ -44,9 +49,37 @@ interface AddProjectModalProps {
 export const AddProjectModal = (props: AddProjectModalProps) => {
   const { isOpen, close } = props;
 
+  const queryClient = useQueryClient();
+
   const { address } = useAccount();
 
   const { signTypedDataAsync } = useSignTypedData();
+
+  const router = useRouter();
+
+  const { mutate, isSuccess } = useMutation({
+    mutationKey: ["add-project"],
+    mutationFn: ({
+      payload,
+      signature,
+    }: {
+      payload: TypedData;
+      signature: string;
+    }) =>
+      axios
+        .post("/api/project", { payload, signature })
+        .then((res) => res.data),
+  });
+
+  useEffect(() => {
+    if (isSuccess) {
+      queryClient.refetchQueries({ queryKey: ["projects"] });
+
+      close();
+
+      router.replace(`/projects/${address}`);
+    }
+  }, [isSuccess]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -63,13 +96,22 @@ export const AddProjectModal = (props: AddProjectModalProps) => {
   const onAdd = async (values: z.infer<typeof formSchema>) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
 
-    const payload = await createTypedProjectData({
+    const projectData: Project = {
+      address: address as `0x${string}`,
+      name: values.projectName,
+      avatar_url: values.imageUrl,
+      goal: BigInt(values.goal),
+      valid_to_timestamp: BigInt(values.deadline.getTime()),
+      description: values.description,
+      website_url: values.website,
+    };
+
+    const payload: TypedData | undefined = await createTypedProjectData({
       signer: address! as string,
-      projectName: values.projectName,
-      imageUrl: values.imageUrl,
-      goal: values.goal,
+      projectName: projectData.name,
+      imageUrl: projectData.avatar_url ?? "",
+      goal: Number(projectData.goal),
       deadline: values.deadline.getTime(),
       description: values.description,
       website: values.website,
@@ -82,7 +124,9 @@ export const AddProjectModal = (props: AddProjectModalProps) => {
       primaryType: PRIMARY_TYPE,
     });
 
-    console.log(signature);
+    if (payload && address) {
+      mutate({ payload, signature });
+    }
   };
 
   return (
