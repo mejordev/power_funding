@@ -7,7 +7,6 @@ export const GET = async () => {
     try {
       const result = await client.query("SELECT * FROM project");
 
-      console.log(result);
       if (result.rows) {
         return Response.json(result.rows, { status: 200 });
       }

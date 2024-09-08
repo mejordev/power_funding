@@ -26,14 +26,6 @@ export const Topbar = (props: TopbarProps) => {
             <p className="text-2xl font-extrabold">Power Funding</p>
           </Link>
         </div>
-        {/* <p>by </p>
-        <Image
-          src="https://cdn.prod.website-files.com/62446d07873fde065cbcb8d5/62446d07873fde3688bcb8f6_Golem_Logo_Negative_RGB.svg"
-          width={100}
-          height={100}
-          alt="Golem"
-          className="invert"
-        /> */}
       </div>
       <div className="flex gap-2 items-center">
         <Button

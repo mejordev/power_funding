@@ -100,20 +100,9 @@ export const DonateModal = (props: DonateModalProps) => {
       functionName: "createDeposit",
       args,
     });
-
-    // const depositId = await getDepositID();
-    // const depositDetails = await getDepositDetails();
-    // return {
-    //   id: "0x" + depositId.toString(16),
-    //   amount: depositDetails.amount,
-    //   contract: config.lockPaymentContract.holeskyAddress,
-    // };
   }
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-
     const hash = await createAllowance({ budget: values.amount, fee: 0.1 });
 
     await waitForTransactionReceipt(rainbowConfig, {
@@ -218,23 +207,6 @@ export const DonateModal = (props: DonateModalProps) => {
                 </div>
               </form>
             </Form>
-            {/* {isConfirming && <div>Waiting for confirmation... </div>}
-            {isConfirmed && <div>Transaction confirmed: </div>} */}
-            {/* {hash && (
-              <Button variant="link">
-                <Link
-                  target="_blank"
-                  href={`${chain!.blockExplorers?.default.url}/tx/${hash}`}
-                >
-                  Check tx block explorer
-                </Link>
-              </Button>
-            )}
-            {error && (
-              <div>
-                Error: {(error as BaseError).shortMessage || error.message}
-              </div>
-            )} */}
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

@@ -79,6 +79,7 @@ export const AddProjectModal = (props: AddProjectModalProps) => {
 
       router.replace(`/project/${address}`);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -94,9 +95,6 @@ export const AddProjectModal = (props: AddProjectModalProps) => {
   });
 
   const onAdd = async (values: z.infer<typeof formSchema>) => {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-
     const projectData: Omit<Project, "percentage"> = {
       address: address as `0x${string}`,
       name: values.projectName,

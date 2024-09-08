@@ -1,11 +1,9 @@
 import dbClient from "@/db";
 import { TypedData } from "@/types";
-import { isValid } from "date-fns";
 import { verifyTypedData } from "viem";
 
 export const GET = async (req: Request) => {
   try {
-    // Get the project address from query params or request
     const url = new URL(req.url);
     const address = url.searchParams.get("address");
 
@@ -16,10 +14,9 @@ export const GET = async (req: Request) => {
     const client = await dbClient.connect();
 
     try {
-      // Query to fetch a project by address
       const result = await client.query(
         "SELECT * FROM project WHERE address = $1",
-        [address] // Pass the address as a parameter
+        [address]
       );
 
       if (result.rows.length > 0) {
@@ -31,7 +28,7 @@ export const GET = async (req: Request) => {
         return new Response("Project not found", { status: 404 });
       }
     } finally {
-      client.release(); // Ensure the client connection is released
+      client.release();
     }
   } catch (e) {
     console.log(e);
@@ -52,7 +49,6 @@ export const POST = async (req: Request) => {
       signature: string;
     } = await req.json();
 
-    // Validate required fields
     if (!body.payload || !body.signature) {
       return new Response(JSON.stringify("Could not add project."), {
         status: 400,
@@ -61,7 +57,6 @@ export const POST = async (req: Request) => {
 
     const { types, message, domain } = body.payload;
 
-    // Verify the signature
     const valid = await verifyTypedData({
       address: body.payload.message.signer as `0x${string}`,
       domain,
@@ -72,7 +67,6 @@ export const POST = async (req: Request) => {
     });
 
     if (valid) {
-      console.log("isval", isValid);
       const query = `
         INSERT INTO "project" (
           "address",
@@ -99,19 +93,13 @@ export const POST = async (req: Request) => {
       try {
         await client.query(query, values);
 
-        // Return the newly inserted project
         return new Response("success", {
           status: 200,
           headers: { "Content-Type": "application/json" },
         });
       } finally {
-        // Ensure the client connection is closed
         client.release();
       }
-
-      return new Response(JSON.stringify("Could not add project."), {
-        status: 500,
-      });
     }
 
     return new Response(JSON.stringify("Invalid signature."), {

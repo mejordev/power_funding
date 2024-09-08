@@ -9,7 +9,7 @@ export const rainbowConfig = getDefaultConfig({
   appName: "Power Funding",
   projectId: "935e78ee89230eb8d1d73d98b48d0055",
   chains: [holesky],
-  ssr: true, // If your dApp uses server side rendering (SSR)
+  ssr: true,
 });
 
 export const GLM_CONTRACT = {

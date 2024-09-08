@@ -12,7 +12,7 @@ export const projects: Project[] = [
     website_url: "https://defifarmer.io",
     valid_to_timestamp: BigInt(
       Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30
-    ), // Valid for 30 days
+    ),
     created_at: new Date(),
     edited_at: new Date(),
     percentage: 72,
@@ -28,7 +28,7 @@ export const projects: Project[] = [
     website_url: "https://tokentrader.ai",
     valid_to_timestamp: BigInt(
       Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 60
-    ), // Valid for 60 days
+    ),
     created_at: new Date(),
     edited_at: new Date(),
     percentage: 85,
@@ -44,7 +44,7 @@ export const projects: Project[] = [
     website_url: "https://sofimonitor.com",
     valid_to_timestamp: BigInt(
       Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 45
-    ), // Valid for 45 days
+    ),
     created_at: new Date(),
     edited_at: new Date(),
     percentage: 63,
@@ -60,7 +60,7 @@ export const projects: Project[] = [
     website_url: "https://nftmarket.io",
     valid_to_timestamp: BigInt(
       Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 90
-    ), // Valid for 90 days
+    ),
     created_at: new Date(),
     edited_at: new Date(),
     percentage: 95,
@@ -76,7 +76,7 @@ export const projects: Project[] = [
     website_url: "https://cryptowallet.io",
     valid_to_timestamp: BigInt(
       Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 120
-    ), // Valid for 120 days
+    ),
     created_at: new Date(),
     edited_at: new Date(),
     percentage: 44,
