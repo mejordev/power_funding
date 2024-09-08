@@ -2,16 +2,10 @@ import { GLM_CONTRACT, LOCK_CONTRACT, rainbowConfig } from "@/constants";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon } from "@radix-ui/react-icons";
+import { waitForTransactionReceipt, writeContract } from "@wagmi/core";
 import { format } from "date-fns";
-import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { parseEther } from "viem";
-import {
-  BaseError,
-  useAccount,
-  useWaitForTransactionReceipt,
-  useWriteContract,
-} from "wagmi";
 import { z } from "zod";
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
@@ -32,8 +26,7 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { useEffect } from "react";
-import { waitForTransactionReceipt, writeContract } from "@wagmi/core";
+import { useQueryClient } from "@tanstack/react-query";
 
 const formSchema = z.object({
   amount: z.number().positive(),
@@ -44,7 +37,7 @@ type DepositParams = {
   address: string;
   budget: number;
   fee: number;
-  expirationSec: BigInt;
+  expirationSec: bigint;
 };
 
 interface DonateModalProps {
@@ -54,24 +47,7 @@ interface DonateModalProps {
 
 export const DonateModal = (props: DonateModalProps) => {
   const { isOpen, close } = props;
-
-  // const { isLoading: isConfirming, isSuccess: isConfirmed } =
-  //   useWaitForTransactionReceipt({
-  //     hash,
-  //   });
-
-  const { address: walletAddress, chain } = useAccount();
-
-  // useEffect(() => {
-  //   if (isConfirmed) {
-  //     createDeposit({
-  //       address: "0x2B898dE2b742922d891559b2C287f09978bB740c",
-  //       budget: form.getValues("amount"),
-  //       fee: 0.1,
-  //       expirationSec: BigInt(form.getValues("deadline").getDate()),
-  //     });
-  //   }
-  // }, [isConfirmed]);
+  const queryClient = useQueryClient();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -118,7 +94,7 @@ export const DonateModal = (props: DonateModalProps) => {
       BigInt(validToTimestamp),
     ];
 
-    const res = await writeContract(rainbowConfig, {
+    await writeContract(rainbowConfig, {
       address: LOCK_CONTRACT.address as `0x${string}`,
       abi: LOCK_CONTRACT.abi,
       functionName: "createDeposit",
@@ -150,6 +126,10 @@ export const DonateModal = (props: DonateModalProps) => {
       fee: 0.1,
       expirationSec: BigInt(form.getValues("deadline").getDate()),
     });
+
+    queryClient.refetchQueries({ queryKey: ["latest-donations"] });
+
+    close();
   };
 
   return (

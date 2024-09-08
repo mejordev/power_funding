@@ -32,12 +32,6 @@ export const Projects = (props: ProjectsProps) => {
       <div className="flex flex-col gap-2">
         <p className="text-2xl font-bold">Projects</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {data?.length === 0 && <p>No projects </p>}
-
-          {data?.map((project) => (
-            <SingleProject key={project.address} project={project} />
-          ))}
-
           {projects?.map((project) => (
             <SingleProject key={project.address} project={project} />
           ))}

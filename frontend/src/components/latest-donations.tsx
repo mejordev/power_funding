@@ -1,7 +1,11 @@
+import { EXPLORER_BASE_URL } from "@/constants";
+import { shortenAddress } from "@/lib/utils";
 import { Donation } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { Badge } from "./ui/badge";
+import moment from "moment";
+import Link from "next/link";
+import { formatEther } from "viem";
 import {
   Card,
   CardContent,
@@ -17,11 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table";
-import moment from "moment";
-import { shortenAddress } from "@/lib/utils";
-import Link from "next/link";
-import { EXPLORER_BASE_URL } from "@/constants";
-import { formatEther, parseEther } from "viem";
+import { sortBy } from "lodash";
 
 interface LatestDonationsProps {
   address?: string;
@@ -40,6 +40,8 @@ export const LatestDonations = (props: LatestDonationsProps) => {
     return null;
   }
 
+  const sortedData = sortBy(data, "added_at").reverse();
+
   return (
     <Card>
       <CardHeader className="px-7">
@@ -57,12 +59,14 @@ export const LatestDonations = (props: LatestDonationsProps) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data?.map((donation) => (
+            {sortedData?.map((donation) => (
               <TableRow
                 key={donation.transaction_hash}
                 className="hover:bg-primary hover:text-white"
               >
-                <TableCell>{moment(donation.added_at).fromNow()}</TableCell>
+                <TableCell>
+                  {moment(donation.added_at).format("YYYY-MM-DD HH:mm:ss")}
+                </TableCell>
                 <TableCell>
                   <Link
                     href={`${EXPLORER_BASE_URL}/address/${donation.transaction_hash}`}

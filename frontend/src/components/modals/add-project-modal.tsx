@@ -77,7 +77,7 @@ export const AddProjectModal = (props: AddProjectModalProps) => {
 
       close();
 
-      router.replace(`/projects/${address}`);
+      router.replace(`/project/${address}`);
     }
   }, [isSuccess]);
 
@@ -97,7 +97,7 @@ export const AddProjectModal = (props: AddProjectModalProps) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
 
-    const projectData: Project = {
+    const projectData: Omit<Project, "percentage"> = {
       address: address as `0x${string}`,
       name: values.projectName,
       avatar_url: values.imageUrl,
