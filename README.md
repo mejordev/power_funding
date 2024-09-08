@@ -53,3 +53,7 @@ npm run dev
 Check out the demo on YouTube:
 
 [Power Funding Demo](https://www.youtube.com/watch?v=QQq2tBoDJik)
+
+### Wallet for bounty:
+
+0xD5CcF457134082Ea617d6D73F9732c6Bf4397FFd
