@@ -1,3 +1,5 @@
+### ✅ The project was awarded the 1st place bounty from [Golem](https://www.golem.network/) at the [ETH Warsaw Hackathon](https://www.ethwarsaw.dev/), 2024 edition.
+
 # Power Funding
 
 You can run the project by following these steps:
